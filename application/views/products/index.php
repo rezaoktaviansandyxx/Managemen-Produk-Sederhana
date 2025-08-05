@@ -6,10 +6,30 @@
 <a href="<?= site_url('products/create') ?>">Tambah Produk</a> |
 <a href="<?= site_url('products/kalkulator') ?>">Kalkulator Harga</a>
 
+<?php
+  $sort = $this->input->get('sort') ?? 'id';
+  $order = $this->input->get('order') ?? 'asc';
+  $search = $this->input->get('search');
+  function sort_link($column, $label, $sort, $order, $search) {
+    $next_order = ($sort == $column && $order == 'asc') ? 'desc' : 'asc';
+    $icon = ($sort == $column) ? ($order == 'asc' ? ' ↑' : ' ↓') : '';
+    $url = site_url('products?sort=' . $column . '&order=' . $next_order);
+    if ($search) {
+      $url .= '&search=' . urlencode($search);
+    }
+    return '<a href="' . $url . '">' . $label . $icon . '</a>';
+  }
+?>
+
 <table border="1">
   <thead>
     <tr>
-      <th>ID</th><th>Nama</th><th>Harga</th><th>Stock</th><th>Formula</th><th>Aksi</th>
+      <th><?= sort_link('id', 'ID', $sort, $order, $search) ?></th>
+      <th><?= sort_link('name', 'Nama', $sort, $order, $search) ?></th>
+      <th><?= sort_link('price', 'Harga', $sort, $order, $search) ?></th>
+      <th><?= sort_link('stock', 'Stock', $sort, $order, $search) ?></th>
+      <th><?= sort_link('formula', 'Formula', $sort, $order, $search) ?></th>
+      <th>Aksi</th>
     </tr>
   </thead>
   <tbody>
